@@ -3,149 +3,114 @@
       th:replace="~{fragments/layout :: layout}">
 <body>
 <div th:fragment="content">
-    <!-- 页面标题 -->
-    <div class="row mb-4">
-        <div class="col-12">
+    <!-- 页面 Hero -->
+    <div class="page-hero fade-in">
+        <div>
             <h2>
-                <i th:class="${isEdit} ? 'bi bi-pencil-square' : 'bi bi-person-plus'"></i>
-                <span th:text="${isEdit} ? '编辑员工' : '新增员工'">新增员工</span>
+                <i th:class="${isEdit} ? 'bi bi-pencil-square' : 'bi bi-person-plus-fill'"></i>
+                <span th:text="${isEdit} ? '编辑员工' : '新增员工'"></span>
             </h2>
-            <nav aria-label="breadcrumb">
+            <nav class="mt-2">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">首页</a></li>
                     <li class="breadcrumb-item"><a href="/employees">员工管理</a></li>
-                    <li class="breadcrumb-item active" th:text="${isEdit} ? '编辑员工' : '新增员工'">新增员工</li>
+                    <li class="breadcrumb-item active" th:text="${isEdit} ? '编辑员工' : '新增员工'"></li>
                 </ol>
             </nav>
         </div>
     </div>
 
     <!-- 表单 -->
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <form th:action="@{/employees/save}" th:object="${employee}" method="post">
-                        <!-- 编辑时传递ID -->
-                        <input type="hidden" th:if="${isEdit}" name="id" th:value="${employee.id}">
+    <div class="row justify-content-center fade-in fade-in-1">
+        <div class="col-lg-8">
+            <form th:action="@{/employees/save}" th:object="${employee}" method="post" class="form-wrapper">
+                <input type="hidden" th:if="${isEdit}" name="id" th:value="${employee.id}">
 
-                        <!-- 基本信息 -->
-                        <h5 class="border-bottom pb-2 mb-3"><i class="bi bi-person"></i> 基本信息</h5>
-
-                        <div class="row">
-                            <!-- 名 -->
-                            <div class="col-md-6 mb-3">
-                                <label for="firstName" class="form-label">
-                                    <span class="text-danger">*</span> 名
-                                </label>
-                                <input type="text" class="form-control" id="firstName"
-                                       th:field="*{firstName}" placeholder="请输入名"
-                                       required maxlength="50">
-                                <div class="form-text text-danger"
-                                     th:if="${#fields.hasErrors('firstName')}"
-                                     th:errors="*{firstName}"></div>
-                            </div>
-
-                            <!-- 姓 -->
-                            <div class="col-md-6 mb-3">
-                                <label for="lastName" class="form-label">姓</label>
-                                <input type="text" class="form-control" id="lastName"
-                                       th:field="*{lastName}" placeholder="请输入姓（选填）"
-                                       maxlength="50">
-                                <div class="form-text text-danger"
-                                     th:if="${#fields.hasErrors('lastName')}"
-                                     th:errors="*{lastName}"></div>
-                            </div>
-                        </div>
-
-                        <!-- 邮箱 -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">
-                                <span class="text-danger">*</span> 邮箱
-                            </label>
-                            <input type="email" class="form-control" id="email"
-                                   th:field="*{email}" placeholder="请输入邮箱地址"
-                                   required maxlength="100">
-                            <div class="form-text text-danger"
-                                 th:if="${#fields.hasErrors('email')}"
-                                 th:errors="*{email}"></div>
-                        </div>
-
-                        <!-- 电话 -->
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">电话</label>
-                            <input type="text" class="form-control" id="phone"
-                                   th:field="*{phone}" placeholder="请输入电话号码（选填）"
-                                   maxlength="20">
-                            <div class="form-text text-danger"
-                                 th:if="${#fields.hasErrors('phone')}"
-                                 th:errors="*{phone}"></div>
-                        </div>
-
-                        <!-- 工作信息 -->
-                        <h5 class="border-bottom pb-2 mb-3 mt-4"><i class="bi bi-briefcase"></i> 工作信息</h5>
-
-                        <!-- 所属部门 -->
-                        <div class="mb-3">
-                            <label for="departmentId" class="form-label">所属部门</label>
-                            <select name="departmentId" id="departmentId" class="form-select">
-                                <option value="">-- 请选择部门（可选）--</option>
-                                <option th:each="dept : ${departments}"
-                                        th:value="${dept.id}"
-                                        th:text="${dept.name}"
-                                        th:selected="${employee.department != null && employee.department.id == dept.id}">技术部</option>
-                            </select>
-                        </div>
-
-                        <!-- 职位 -->
-                        <div class="mb-3">
-                            <label for="position" class="form-label">职位</label>
-                            <input type="text" class="form-control" id="position"
-                                   th:field="*{position}" placeholder="请输入职位名称（选填）"
-                                   maxlength="100">
-                            <div class="form-text text-danger"
-                                 th:if="${#fields.hasErrors('position')}"
-                                 th:errors="*{position}"></div>
-                        </div>
-
-                        <div class="row">
-                            <!-- 薪资 -->
-                            <div class="col-md-6 mb-3">
-                                <label for="salary" class="form-label">薪资 (¥)</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">¥</span>
-                                    <input type="number" class="form-control" id="salary"
-                                           th:field="*{salary}" placeholder="请输入月薪"
-                                           step="0.01" min="0">
-                                </div>
-                                <div class="form-text text-danger"
-                                     th:if="${#fields.hasErrors('salary')}"
-                                     th:errors="*{salary}"></div>
-                            </div>
-
-                            <!-- 入职日期 -->
-                            <div class="col-md-6 mb-3">
-                                <label for="hireDate" class="form-label">入职日期</label>
-                                <input type="date" class="form-control" id="hireDate"
-                                       th:field="*{hireDate}">
-                                <div class="form-text text-danger"
-                                     th:if="${#fields.hasErrors('hireDate')}"
-                                     th:errors="*{hireDate}"></div>
-                            </div>
-                        </div>
-
-                        <!-- 按钮组 -->
-                        <div class="d-flex justify-content-between mt-4">
-                            <a href="/employees" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left"></i> 返回
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-lg"></i> <span th:text="${isEdit} ? '更新员工' : '保存员工'">保存</span>
-                            </button>
-                        </div>
-                    </form>
+                <!-- 基本信息 -->
+                <div class="form-section-title">
+                    <i class="icon-person bi bi-person-fill"></i> 基本信息
                 </div>
-            </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="firstName" class="form-label"><span class="text-danger">*</span> 名</label>
+                        <input type="text" class="form-control" id="firstName"
+                               th:field="*{firstName}" placeholder="请输入名" maxlength="50">
+                        <div class="form-text text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName" class="form-label">姓</label>
+                        <input type="text" class="form-control" id="lastName"
+                               th:field="*{lastName}" placeholder="请输入姓（选填）" maxlength="50">
+                        <div class="form-text text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label"><span class="text-danger">*</span> 邮箱</label>
+                    <input type="email" class="form-control" id="email"
+                           th:field="*{email}" placeholder="name@company.com" maxlength="100">
+                    <div class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">电话</label>
+                    <input type="text" class="form-control" id="phone"
+                           th:field="*{phone}" placeholder="请输入电话号码（选填）" maxlength="20">
+                    <div class="form-text text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                </div>
+
+                <!-- 工作信息 -->
+                <div class="form-section-title mt-4">
+                    <i class="icon-work bi bi-briefcase-fill"></i> 工作信息
+                </div>
+
+                <div class="mb-3">
+                    <label for="departmentId" class="form-label">所属部门</label>
+                    <select name="departmentId" id="departmentId" class="form-select">
+                        <option value="">-- 请选择部门（可选）--</option>
+                        <option th:each="dept : ${departments}"
+                                th:value="${dept.id}"
+                                th:text="${dept.name}"
+                                th:selected="${employee.department != null && employee.department.id == dept.id}"></option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="position" class="form-label">职位</label>
+                    <input type="text" class="form-control" id="position"
+                           th:field="*{position}" placeholder="如：高级Java开发工程师" maxlength="100">
+                    <div class="form-text text-danger" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="salary" class="form-label">薪资 (¥/月)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">¥</span>
+                            <input type="number" class="form-control" id="salary"
+                                   th:field="*{salary}" placeholder="请输入月薪" step="0.01" min="0">
+                        </div>
+                        <div class="form-text text-danger" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="hireDate" class="form-label">入职日期</label>
+                        <input type="date" class="form-control" id="hireDate" th:field="*{hireDate}">
+                        <div class="form-text text-danger" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}"></div>
+                    </div>
+                </div>
+
+                <!-- 按钮 -->
+                <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                    <a href="/employees" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>返回列表
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-check-lg me-1"></i>
+                        <span th:text="${isEdit} ? '更新员工' : '保存员工'"></span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

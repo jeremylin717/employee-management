@@ -3,89 +3,94 @@
       th:replace="~{fragments/layout :: layout}">
 <body>
 <div th:fragment="content">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="border-bottom pb-2"><i class="bi bi-speedometer2"></i> 系统仪表盘</h2>
-            <p class="text-muted">欢迎使用企业员工管理系统，快速管理您的员工和部门信息。</p>
+    <!-- 欢迎 Hero -->
+    <div class="page-hero fade-in">
+        <div>
+            <h2><i class="bi bi-speedometer2"></i> 系统仪表盘</h2>
+            <nav class="mt-2">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">首页</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="text-muted" style="font-size:0.9rem">
+            <i class="bi bi-calendar3 me-1"></i>
+            <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy年MM月dd日 EEEE')}">2026年6月10日</span>
         </div>
     </div>
 
     <!-- 统计卡片 -->
     <div class="row g-4 mb-5">
-        <div class="col-md-6">
-            <div class="card border-primary h-100">
-                <div class="card-body text-center">
-                    <div class="stat-icon text-primary mb-3">
-                        <i class="bi bi-people" style="font-size: 3rem;"></i>
-                    </div>
-                    <h3 class="card-title display-6 fw-bold text-primary" th:text="${totalEmployees}">0</h3>
-                    <p class="card-text text-muted">员工总数</p>
-                    <a href="/employees" class="btn btn-outline-primary">
-                        <i class="bi bi-arrow-right-circle"></i> 管理员工
-                    </a>
+        <div class="col-md-6 fade-in fade-in-1">
+            <div class="stat-card primary">
+                <div class="stat-icon-bg primary">
+                    <i class="bi bi-people-fill"></i>
                 </div>
+                <div class="stat-value text-primary" th:text="${totalEmployees}">0</div>
+                <div class="stat-label">员工总数</div>
+                <a href="/employees" class="btn btn-sm btn-primary mt-3">
+                    <i class="bi bi-arrow-right me-1"></i>管理员工
+                </a>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card border-success h-100">
-                <div class="card-body text-center">
-                    <div class="stat-icon text-success mb-3">
-                        <i class="bi bi-building" style="font-size: 3rem;"></i>
-                    </div>
-                    <h3 class="card-title display-6 fw-bold text-success" th:text="${totalDepartments}">0</h3>
-                    <p class="card-text text-muted">部门总数</p>
-                    <a href="/departments" class="btn btn-outline-success">
-                        <i class="bi bi-arrow-right-circle"></i> 管理部门
-                    </a>
+        <div class="col-md-6 fade-in fade-in-2">
+            <div class="stat-card success">
+                <div class="stat-icon-bg success">
+                    <i class="bi bi-building-fill"></i>
                 </div>
+                <div class="stat-value text-success" th:text="${totalDepartments}">0</div>
+                <div class="stat-label">部门总数</div>
+                <a href="/departments" class="btn btn-sm btn-success mt-3">
+                    <i class="bi bi-arrow-right me-1"></i>管理部门
+                </a>
             </div>
         </div>
     </div>
 
     <!-- 快捷操作 -->
-    <div class="row g-4">
+    <div class="mb-4 fade-in fade-in-3">
+        <h5 class="fw-bold mb-3" style="letter-spacing:-0.3px">
+            <i class="bi bi-lightning-charge-fill text-warning me-2"></i>快捷操作
+        </h5>
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <a href="/employees/new" class="quick-action employee-add text-decoration-none">
+                    <span class="qa-icon">🧑‍💼</span>
+                    <span class="qa-text">添加员工</span>
+                </a>
+            </div>
+            <div class="col-md-3 col-6">
+                <a href="/departments/new" class="quick-action dept-add text-decoration-none">
+                    <span class="qa-icon">🏢</span>
+                    <span class="qa-text">新增部门</span>
+                </a>
+            </div>
+            <div class="col-md-3 col-6">
+                <a href="/employees" class="quick-action search text-decoration-none">
+                    <span class="qa-icon">🔍</span>
+                    <span class="qa-text">查找员工</span>
+                </a>
+            </div>
+            <div class="col-md-3 col-6">
+                <a href="/departments" class="quick-action org text-decoration-none">
+                    <span class="qa-icon">📊</span>
+                    <span class="qa-text">部门架构</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 系统信息 -->
+    <div class="row g-4 fade-in fade-in-4">
         <div class="col-12">
-            <h4 class="border-bottom pb-2"><i class="bi bi-lightning-charge"></i> 快捷操作</h4>
-        </div>
-        <div class="col-md-3">
-            <a href="/employees/new" class="text-decoration-none">
-                <div class="card border-info hover-shadow">
-                    <div class="card-body text-center">
-                        <i class="bi bi-person-plus text-info" style="font-size: 2rem;"></i>
-                        <p class="mt-2 mb-0 fw-bold text-dark">添加员工</p>
-                    </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="bi bi-info-circle-fill text-info me-2"></i>
+                    <span class="fw-semibold text-muted">
+                        提示：系统支持员工与部门的关联管理、分页搜索、以及完整的增删改查操作
+                    </span>
                 </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="/departments/new" class="text-decoration-none">
-                <div class="card border-warning hover-shadow">
-                    <div class="card-body text-center">
-                        <i class="bi bi-plus-square text-warning" style="font-size: 2rem;"></i>
-                        <p class="mt-2 mb-0 fw-bold text-dark">新增部门</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="/employees" class="text-decoration-none">
-                <div class="card border-secondary hover-shadow">
-                    <div class="card-body text-center">
-                        <i class="bi bi-search text-secondary" style="font-size: 2rem;"></i>
-                        <p class="mt-2 mb-0 fw-bold text-dark">查找员工</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-3">
-            <a href="/departments" class="text-decoration-none">
-                <div class="card border-dark hover-shadow">
-                    <div class="card-body text-center">
-                        <i class="bi bi-diagram-3 text-dark" style="font-size: 2rem;"></i>
-                        <p class="mt-2 mb-0 fw-bold text-dark">部门架构</p>
-                    </div>
-                </div>
-            </a>
+            </div>
         </div>
     </div>
 </div>

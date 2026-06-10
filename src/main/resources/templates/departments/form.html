@@ -3,68 +3,58 @@
       th:replace="~{fragments/layout :: layout}">
 <body>
 <div th:fragment="content">
-    <!-- 页面标题 -->
-    <div class="row mb-4">
-        <div class="col-12">
+    <!-- 页面 Hero -->
+    <div class="page-hero fade-in">
+        <div>
             <h2>
-                <i th:class="${isEdit} ? 'bi bi-pencil-square' : 'bi bi-plus-square'"></i>
-                <span th:text="${isEdit} ? '编辑部门' : '新增部门'">新增部门</span>
+                <i th:class="${isEdit} ? 'bi bi-pencil-square' : 'bi bi-plus-square-fill'"></i>
+                <span th:text="${isEdit} ? '编辑部门' : '新增部门'"></span>
             </h2>
-            <nav aria-label="breadcrumb">
+            <nav class="mt-2">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">首页</a></li>
                     <li class="breadcrumb-item"><a href="/departments">部门管理</a></li>
-                    <li class="breadcrumb-item active" th:text="${isEdit} ? '编辑部门' : '新增部门'">新增部门</li>
+                    <li class="breadcrumb-item active" th:text="${isEdit} ? '编辑部门' : '新增部门'"></li>
                 </ol>
             </nav>
         </div>
     </div>
 
     <!-- 表单 -->
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <form th:action="@{/departments/save}" th:object="${department}" method="post">
-                        <!-- 编辑时传递ID -->
-                        <input type="hidden" th:if="${isEdit}" name="id" th:value="${department.id}">
+    <div class="row justify-content-center fade-in fade-in-1">
+        <div class="col-lg-7">
+            <form th:action="@{/departments/save}" th:object="${department}" method="post" class="form-wrapper">
+                <input type="hidden" th:if="${isEdit}" name="id" th:value="${department.id}">
 
-                        <!-- 部门名称 -->
-                        <div class="mb-3">
-                            <label for="name" class="form-label">
-                                <span class="text-danger">*</span> 部门名称
-                            </label>
-                            <input type="text" class="form-control" id="name"
-                                   th:field="*{name}" placeholder="请输入部门名称"
-                                   required maxlength="100">
-                            <div class="form-text text-danger"
-                                 th:if="${#fields.hasErrors('name')}"
-                                 th:errors="*{name}"></div>
-                        </div>
-
-                        <!-- 部门描述 -->
-                        <div class="mb-3">
-                            <label for="description" class="form-label">部门描述</label>
-                            <textarea class="form-control" id="description"
-                                      th:field="*{description}" rows="4"
-                                      placeholder="请输入部门描述（选填）" maxlength="500"></textarea>
-                            <div class="form-text text-danger"
-                                 th:if="${#fields.hasErrors('description')}"
-                                 th:errors="*{description}"></div>
-                        </div>
-
-                        <!-- 按钮组 -->
-                        <div class="d-flex justify-content-between">
-                            <a href="/departments" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left"></i> 返回
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-lg"></i> <span th:text="${isEdit} ? '更新部门' : '保存部门'">保存</span>
-                            </button>
-                        </div>
-                    </form>
+                <div class="form-section-title">
+                    <i class="icon-person bi bi-building-fill"></i> 部门信息
                 </div>
-            </div>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label"><span class="text-danger">*</span> 部门名称</label>
+                    <input type="text" class="form-control form-control-lg" id="name"
+                           th:field="*{name}" placeholder="如：技术部、市场部" maxlength="100">
+                    <div class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="description" class="form-label">部门描述</label>
+                    <textarea class="form-control" id="description"
+                              th:field="*{description}" rows="5"
+                              placeholder="描述部门的职责与工作内容（选填）" maxlength="500"></textarea>
+                    <div class="form-text text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                </div>
+
+                <div class="d-flex justify-content-between pt-3 border-top">
+                    <a href="/departments" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>返回列表
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-check-lg me-1"></i>
+                        <span th:text="${isEdit} ? '更新部门' : '保存部门'"></span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
