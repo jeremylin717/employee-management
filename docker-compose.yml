@@ -1,0 +1,44 @@
+# =============================================
+# Docker Compose — 一键启动 App + MySQL
+# 用法: docker-compose up -d
+# =============================================
+
+version: '3.8'
+
+services:
+  # --- MySQL 数据库 ---
+  mysql:
+    image: mysql:8.0
+    container_name: emp-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: employee_db
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./src/main/resources/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # --- Spring Boot 应用 ---
+  app:
+    build: .
+    container_name: emp-app
+    ports:
+      - "8088:8088"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/employee_db?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf-8
+      DB_USER: root
+      DB_PASS: 123456
+      PORT: 8088
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
