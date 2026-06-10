@@ -109,7 +109,7 @@
             <i class="bi bi-pencil"></i> 编辑
         </a>
         <button class="btn btn-danger"
-                th:onclick="|if(confirm('确定要删除员工 "${employee.fullName}" 吗？此操作不可撤销！')) { document.getElementById('deleteForm').submit(); }|">
+                th:onclick="'confirmDelete(''员工'', ''' + ${employee.fullName} + ''', ''deleteForm'')'">
             <i class="bi bi-trash"></i> 删除
         </button>
         <form id="deleteForm" th:action="@{/employees/delete/{id}(id=${employee.id})}" method="post" style="display:none"></form>

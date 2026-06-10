@@ -82,7 +82,7 @@
                                 <i class="bi bi-pencil"></i>
                             </a>
                             <button class="btn btn-sm btn-outline-danger" title="删除"
-                                    th:onclick="|if(confirm('确定要删除部门 "${dept.name}" 吗？若有员工属于该部门，将被移出。')) { document.getElementById('deleteForm-${dept.id}').submit(); }|">
+                                    th:onclick="'confirmDelete(''部门'', ''' + ${dept.name} + ''', ''deleteForm-' + ${dept.id} + ''')'">
                                 <i class="bi bi-trash"></i>
                             </button>
                             <form th:id="'deleteForm-' + ${dept.id}" th:action="@{/departments/delete/{id}(id=${dept.id})}" method="post" style="display:none"></form>
