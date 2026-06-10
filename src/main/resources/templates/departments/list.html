@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout}">
+<body>
+<div th:fragment="content">
+    <!-- 页面标题和操作栏 -->
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h2><i class="bi bi-building"></i> 部门管理</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="/departments/new" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> 新增部门
+            </a>
+        </div>
+    </div>
+
+    <!-- 搜索栏 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form th:action="@{/departments}" method="get" class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" name="keyword" class="form-control"
+                           th:value="${keyword}" placeholder="输入部门名称搜索...">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-search"></i> 搜索
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a href="/departments" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-arrow-counterclockwise"></i> 重置
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 部门列表 -->
+    <div class="card">
+        <div class="card-body p-0">
+            <div th:if="${departments == null || departments.empty}" class="text-center p-5">
+                <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                <p class="mt-3 text-muted">暂无部门数据</p>
+                <a href="/departments/new" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> 新增第一个部门
+                </a>
+            </div>
+            <table th:if="${departments != null && !departments.empty}" class="table table-hover mb-0">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>部门名称</th>
+                        <th>描述</th>
+                        <th>员工数量</th>
+                        <th>创建时间</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="dept, iterStat : ${departments}">
+                        <td th:text="${dept.id}">1</td>
+                        <td>
+                            <a th:href="@{/departments/detail/{id}(id=${dept.id})}" class="fw-bold text-decoration-none"
+                               th:text="${dept.name}">技术部</a>
+                        </td>
+                        <td>
+                            <span th:text="${dept.description != null ? #strings.abbreviate(dept.description, 50) : '-'}">-</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary rounded-pill" th:text="${dept.employeeCount}">0</span>
+                        </td>
+                        <td th:text="${#temporals.format(dept.createdDate, 'yyyy-MM-dd HH:mm')}">2026-01-01</td>
+                        <td class="text-center">
+                            <a th:href="@{/departments/detail/{id}(id=${dept.id})}"
+                               class="btn btn-sm btn-outline-info" title="查看">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a th:href="@{/departments/edit/{id}(id=${dept.id})}"
+                               class="btn btn-sm btn-outline-warning" title="编辑">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button class="btn btn-sm btn-outline-danger" title="删除"
+                                    th:onclick="|if(confirm('确定要删除部门 "${dept.name}" 吗？若有员工属于该部门，将被移出。')) { document.getElementById('deleteForm-${dept.id}').submit(); }|">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <form th:id="'deleteForm-' + ${dept.id}" th:action="@{/departments/delete/{id}(id=${dept.id})}" method="post" style="display:none"></form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

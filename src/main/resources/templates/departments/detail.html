@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout}">
+<body>
+<div th:fragment="content">
+    <!-- 页面标题 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2><i class="bi bi-building"></i> 部门详情</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">首页</a></li>
+                    <li class="breadcrumb-item"><a href="/departments">部门管理</a></li>
+                    <li class="breadcrumb-item active" th:text="${department.name}">部门详情</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 部门信息 -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-info-circle"></i> 基本信息
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th class="w-25 text-muted">部门编号</th>
+                            <td th:text="${department.id}">1</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">部门名称</th>
+                            <td class="fw-bold" th:text="${department.name}">技术部</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">部门描述</th>
+                            <td th:text="${department.description != null ? department.description : '暂无描述'}">-</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">创建时间</th>
+                            <td th:text="${#temporals.format(department.createdDate, 'yyyy-MM-dd HH:mm:ss')}">2026-01-01</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">员工数量</th>
+                            <td>
+                                <span class="badge bg-primary rounded-pill" th:text="${department.employeeCount}">0</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <a th:href="@{/departments/edit/{id}(id=${department.id})}" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> 编辑
+                    </a>
+                    <a href="/departments" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> 返回列表
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 部门员工列表 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <i class="bi bi-people"></i> 部门员工
+                    <span class="badge bg-light text-dark ms-2" th:text="${department.employeeCount}">0</span>
+                </div>
+                <div class="card-body p-0">
+                    <div th:if="${department.employees == null || department.employees.empty}" class="text-center p-4">
+                        <p class="text-muted mb-0">该部门暂无员工</p>
+                    </div>
+                    <ul th:if="${department.employees != null && !department.employees.empty}" class="list-group list-group-flush">
+                        <li th:each="emp : ${department.employees}" class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <a th:href="@{/employees/detail/{id}(id=${emp.id})}" class="text-decoration-none">
+                                    <strong th:text="${emp.fullName}">张三</strong>
+                                </a>
+                                <br>
+                                <small class="text-muted" th:text="${emp.position}">工程师</small>
+                            </div>
+                            <span class="badge bg-secondary rounded-pill" th:text="${emp.email}">email</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a th:href="@{/employees/new}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-person-plus"></i> 添加员工
+                    </a>
+                    <a th:href="@{/employees(departmentId=${department.id})}" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-arrow-right"></i> 查看全部员工
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
